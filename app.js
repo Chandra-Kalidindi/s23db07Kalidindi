@@ -4,11 +4,31 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
+require('dotenv').config();
+const connectionString =
+process.env.MONGO_CON
+mongoose = require('mongoose');
+mongoose.connect(connectionString,
+{useNewUrlParser: true,
+useUnifiedTopology: true});
+
+//Get the default connection
+var db = mongoose.connection;
+//Bind connection to error event
+db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
+db.once("open", function(){
+console.log("Connection to DB succeeded")});
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gasRouter = require('./routes/gas');
 var boardRouter = require('./routes/board');
 var selectorRouter = require('./routes/selector');
+var resourceRouter = require('./routes/resource');
+
+var Gas = require('./models/gas');
+
 
 var app = express();
 
@@ -27,6 +47,7 @@ app.use('/users', usersRouter);
 app.use('/gas', gasRouter);
 app.use('/board', boardRouter);
 app.use('/selector', selectorRouter);
+app.use('/resource', resourceRouter );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,5 +64,36 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// We can seed the collection if needed on server start
+async function recreateDB(){
+ // Delete everything
+ await Gas.deleteMany();
+ let instance1 = new
+ Gas({gas_name:"Bharat", quantity:66, types:"Diesel"});
+ let instance2 = new
+ Gas({gas_name:"cenex", quantity:76, types:"petrol"});
+ let instance3 = new
+ Gas({gas_name:"Hp", quantity:56, types:"Kerosene"});
+ instance1.save().then(doc=>{
+ console.log("First object saved");}
+ ).catch(err=>{
+ console.error(err);
+ });
+
+ instance2.save().then(doc=>{
+  console.log("Second object saved");}
+  ).catch(err=>{
+  console.error(err);
+  });
+  instance3.save().then(doc=>{
+    console.log("Third object saved");}
+    ).catch(err=>{
+    console.error(err);
+    });
+ 
+}
+let reseed = true;
+if (reseed) {recreateDB();}
 
 module.exports = app;
