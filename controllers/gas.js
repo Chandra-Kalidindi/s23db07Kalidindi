@@ -1,3 +1,4 @@
+const gas = require('../models/gas');
 var Gas = require('../models/gas');
 
 // List of all Costumes
@@ -11,13 +12,13 @@ exports.gases_list = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
    };
-// for a specific Costume.
+// for a specific gas.
 exports.gases_detail = function(req, res) {
- res.send('NOT IMPLEMENTED: Costume detail: ' + req.params.id);
+ res.send('NOT IMPLEMENTED: gas detail: ' + req.params.id);
 };
 
 
-// Handle Costume create on POST.
+// Handle gas create on POST.
 exports.gases_create_post = async function(req, res) {
     console.log(req.body)
     let document = new Gas();
@@ -37,13 +38,13 @@ exports.gases_create_post = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
    };
-// Handle Costume delete form on DELETE.
+// Handle gas delete form on DELETE.
 exports.gases_delete = function(req, res) {
- res.send('NOT IMPLEMENTED: Costume delete DELETE ' + req.params.id);
+ res.send('NOT IMPLEMENTED: gas delete DELETE ' + req.params.id);
 };
-// Handle Costume update form on PUT.
+// Handle gas update form on PUT.
 exports.gases_update_put = function(req, res) {
- res.send('NOT IMPLEMENTED: Costume update PUT' + req.params.id);
+ res.send('NOT IMPLEMENTED: gas update PUT' + req.params.id);
 };
 
 // Handle a show all view
@@ -57,3 +58,35 @@ exports.gases_view_all_Page = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
    };
+// for a specific gas.
+   exports.gases_detail = async function(req, res) {
+   console.log("detail" + req.params.id)
+   try {
+   result = await Gas.findById( req.params.id)
+   res.send(String(result))
+   console.log(result)
+   } catch (error) {
+   res.status(500)
+   res.send(`{"error": document for id ${req.params.id} not found`);
+   }
+   };
+// Handle gas update form on PUT.
+   exports.gases_update_put = async function(req, res) {
+   console.log(`update on id ${req.params.id} with body
+   ${JSON.stringify(req.body)}`)
+   try {
+   let toUpdate = await Gas.findById( req.params.id)
+   // Do updates of properties
+   if(req.body.gas_name)
+   toUpdate.gas_name = req.body.gas_name;
+   if(req.body.quantity) toUpdate.quantity = req.body.quantity;
+   if(req.body.types) toUpdate.types = req.body.types;
+   let result = await toUpdate.save();
+   console.log("Sucess " + result)
+   res.send(result)
+   } catch (err) {
+   res.status(500)
+   res.send(`{"error": ${err}: Update for id ${req.params.id}
+   failed`);
+   }
+   };  
