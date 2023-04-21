@@ -2,13 +2,19 @@ extends layout
 
 block content
   h1= title
-  //- - let results=[{gas_name:"nylon",quantity:2,types:"silicone"},{gas_name:"sodium",quantity:4,types:"silicone "},{gas_name:"co2",quantity:5,types:"o2"}]
-  - let items=results
-  div(class="row")
-  each value,indexValue in items
-    div(class="col-sm-2" onclick=`buy(${indexValue})`)  #{value.gas_name} Gas, quantity is #{value.quantity}, type #{value.types}
-  script. 
-    function buy(indexValue)
-    {
-      alert(`You purchased Item ${indexValue+1}`)
-    } 
+  - let items = results
+  div(claass="container-fluid mt-3")
+   div(class="row m-1")
+    each item,index in items
+     - let destination = `dispatch(\"/gas/update?id=${item._id}\")`
+     div(class="col-sm-3 bg-info m-2 p-4" onclick=`buy(${index})`) #{item.gas_name} - #{item.quantity } - #{item.types}
+      button.btn( class="btn-primary ml-1", onclick= destination) Update
+  script.
+   function buy(itemNo)
+   {
+     alert(`You purchased Item ${itemNo+1}`)
+   }
+   function dispatch(path)
+   {
+     window.location.href=path
+   }
