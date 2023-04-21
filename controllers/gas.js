@@ -1,11 +1,11 @@
 const gas = require('../models/gas');
 var Gas = require('../models/gas');
 
-// List of all Costumes
+// List of all gass
 exports.gases_list = async function(req, res) {
     try{
-    theCostumes = await Gas.find();
-    res.send(theCostumes);
+    thegass = await Gas.find();
+    res.send(thegass);
     }
     catch(err){
     res.status(500);
@@ -38,20 +38,14 @@ exports.gases_create_post = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }
    };
-// Handle gas delete form on DELETE.
-exports.gases_delete = function(req, res) {
- res.send('NOT IMPLEMENTED: gas delete DELETE ' + req.params.id);
-};
-// Handle gas update form on PUT.
-exports.gases_update_put = function(req, res) {
- res.send('NOT IMPLEMENTED: gas update PUT' + req.params.id);
-};
+
+
 
 // Handle a show all view
 exports.gases_view_all_Page = async function(req, res) {
     try{
-    theCostumes = await Gas.find();
-    res.render('gas', { title: 'Gas Search Results', results: theCostumes });
+    thegass = await Gas.find();
+    res.render('gas', { title: 'Gas Search Results', results: thegass });
     }
     catch(err){
     res.status(500);
@@ -89,4 +83,70 @@ exports.gases_view_all_Page = async function(req, res) {
    res.send(`{"error": ${err}: Update for id ${req.params.id}
    failed`);
    }
-   };  
+   }; 
+   
+   // Handle gas delete on DELETE.
+exports.gases_delete = async function(req, res) {
+   console.log("delete " + req.params.id)
+   try {
+   result = await gas.findByIdAndDelete( req.params.id)
+   console.log("Removed " + result)
+   res.send(result)
+   } catch (err) {
+   res.status(500)
+   res.send(`{"error": Error deleting ${err}}`);
+   }
+  };
+  // Handle a show one view with id specified by query
+exports.gas_view_one_Page = async function(req, res) {
+   console.log("single view for id " + req.query.id)
+   try{
+   result = await gas.findById( req.query.id)
+   res.render('gasdetail',
+  { title: 'gas Detail', toShow: result });
+   }
+   catch(err){
+   res.status(500)
+   res.send(`{'error': '${err}'}`);
+   }
+  };
+  
+   // Handle building the view for creating a gas.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.gas_create_Page = function(req, res) {
+   console.log("create view")
+   try{
+   res.render('gascreate', { title: 'gas Create'});
+   }
+   catch(err){
+   res.status(500)
+   res.send(`{'error': '${err}'}`);
+   }
+  };
+// Handle building the view for updating a gas.
+// query provides the id
+exports.gas_update_Page = async function(req, res) {
+   console.log("update view for item "+req.query.id)
+   try{
+   let result = await gas.findById(req.query.id)
+   res.render('gasupdate', { title: 'gas Update', toShow: result });
+   }
+   catch(err){
+   res.status(500)
+   res.send(`{'error': '${err}'}`);
+   }
+  };
+  // Handle a delete one view with id from query
+exports.gas_delete_Page = async function(req, res) {
+   console.log("Delete view for id " + req.query.id)
+   try{
+   result = await gas.findById(req.query.id)
+   res.render('gasdelete', { title: 'gas Delete', toShow:
+  result });
+   }
+   catch(err){
+   res.status(500)
+   res.send(`{'error': '${err}'}`);
+   }
+  };

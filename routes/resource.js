@@ -10,7 +10,7 @@ router.get('/', api_controller.api);
 // POST request for creating a Costume.
 router.post('/gases', gas_controller.gases_create_post);
 // // DELETE request to delete Costume.
-// router.delete('/gases/:id', gas_controller.gases_delete);
+router.delete('/gases/:id', gas_controller.gases_delete);
 // PUT request to update Costume.
 router.put('/gases/:id', gas_controller.gases_update_put);
 // GET request for one Costume.

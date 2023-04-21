@@ -1,0 +1,22 @@
+extends layout
+
+block content
+ h1(class='bonus')= title
+
+  if (toShow==null)
+   h2 No Instance to detail
+  else
+   - let gas_name = toShow.gas_name 
+   - let quantity = toShow.quantity 
+   - let types  = toShow.types
+    div 
+
+    div.row 
+      div(class='gasAttr mr-3') gas_name is: 
+      div #{gas_name} 
+    div.row 
+      div(class='gasAttr mr-3')  quantity is: 
+      div #{quantity} 
+    div.row 
+      div(class='gasAttr mr-3') type is: 
+      div #{types} 
