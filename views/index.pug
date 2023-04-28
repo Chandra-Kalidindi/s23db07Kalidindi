@@ -1,15 +1,26 @@
 extends layout
 
-block content
-  h1= title
-  p Gopal page #{title}
-  button(type="button", class="btn btn-success" onClick="doReduce()") Press Me
-  div#reduce Reduce the value. 
-  script.  
-    var count = 20
-    var change = -1
-    function doReduce() {
-      count = count + change 
-      change--;
-      document.getElementById("reduce").innerHTML = "Count "+ count +" with change "+change;
-    }
+block content 
+  if (!user) 
+    a(href="/login") Login 
+    br 
+    a(href="/register") Register 
+  if (user) 
+    p You are currently logged in as #{user.username} 
+    a(href="/gas") Take me to gas 
+    br 
+    a(href="/logout") Logout
+
+//- block content
+//-   h1= title
+//-   p Gopal page #{title}
+//-   button(type="button", class="btn btn-success" onClick="doReduce()") Press Me
+//-   div#reduce Reduce the value. 
+//-   script.  
+//-     var count = 20
+//-     var change = -1
+//-     function doReduce() {
+//-       count = count + change 
+//-       change--;
+//-       document.getElementById("reduce").innerHTML = "Count "+ count +" with change "+change;
+//-     }
